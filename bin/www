@@ -1,0 +1,59 @@
+const app       = require('../app')
+const http      = require('http')
+const config    = require('../config/config')
+const logger    = require('../logs/logger')
+
+let port = normalizePort(config.app.port)
+let host = config.app.host
+
+//Create HTTP server.
+var server = http.createServer(app)
+
+//Listen on provided port and host.
+server.listen(port, host);
+server.on('error', onError);
+server.on('listening', () => {
+    logger.info(`Server started on ${new Date()}`);
+    logger.info(`server is running at http://${server.address().address}:${server.address().port}`);
+})
+
+// Normalize a port into a number, string, or false.
+function normalizePort(val) {
+    let port = parseInt(val, 10);
+    if (isNaN(port)) {
+        // named pipe
+        return val;
+    }
+    if (port >= 0) {
+        // port number
+        return port;
+    }
+    return false;
+}
+
+//Event listener for HTTP server "error" event.
+function onError(error) {
+    if (error.syscall !== 'listen') {
+        logger.error(error)
+        throw error;
+    }
+    let bind = typeof port === 'string'
+        ? 'Pipe ' + port
+        : 'Port ' + port;
+    // handle specific listen errors with friendly messages
+    switch (error.code) {
+        case 'EACCES':
+            console.error(bind + ' requires elevated privileges');
+            logger.error(bind + ' requires elevated privileges');
+            process.exit(1);
+            break;
+        case 'EADDRINUSE':
+            console.error(bind + ' is already in use');
+            logger.error(bind + ' is already in use');
+            process.exit(1);
+            break;
+        default:
+            logger.error(error);
+            throw error;
+    }
+}
