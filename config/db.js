@@ -1,6 +1,6 @@
 const mongoose  = require('mongoose')
 const logger    = require('../logs/logger')
-const config    = require('../config/config')
+const config    = require('./config')
 
 // Mongoose connection
 mongoose.Promise = global.Promise;

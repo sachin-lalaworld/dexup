@@ -9,10 +9,10 @@ const cookieParser  = require('cookie-parser')
 const config        = require('./config/config')
 const errHndlr      = require('./src/utils/errors')
 const logger        = require('./logs/logger')
-//const winston       = require('winston')
-// const expressWinston= require('express-winston')
+const winston       = require('winston')
+const expressWinston= require('express-winston')
 require('winston-daily-rotate-file')
-require('./database/db')
+require('./config/db')
 
 // Initializing express app
 const app = express()
@@ -49,20 +49,20 @@ const limiter = new rateLimit({
 app.use(limiter)
 
 // winston Configuration
-// expressWinston.requestWhitelist.push('body');
-// expressWinston.responseWhitelist.push('body');
-// expressWinston.bodyBlacklist.push('backupkey', 'password', 'pin', 'mPass', 'keyObject');
-// app.use(expressWinston.logger({
-//   transports: [
-//     new (winston.transports.DailyRotateFile)({
-//       dirname: './logs',
-//       filename: 'access-%DATE%.log',
-//       datePattern: 'YYYY-MM-DD-HH',
-//       zippedArchive: true,
-//       maxSize: '20m',
-//       maxFiles: '1d'
-//     })]
-// }));
+expressWinston.requestWhitelist.push('body');
+expressWinston.responseWhitelist.push('body');
+expressWinston.bodyBlacklist.push('backupkey', 'password', 'pin', 'mPass', 'keyObject');
+app.use(expressWinston.logger({
+  transports: [
+    new (winston.transports.DailyRotateFile)({
+      dirname: './logs',
+      filename: 'access-%DATE%.log',
+      datePattern: 'YYYY-MM-DD-HH',
+      zippedArchive: true,
+      maxSize: '20m',
+      maxFiles: '1d'
+    })]
+}));
 // express-session config
 app.use(session({
     secret: 'My super session secret',

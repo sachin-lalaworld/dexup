@@ -8,7 +8,7 @@ const config = {
             host : process.env.HOST
         },
         db : {
-            uri  : process.env.DB+'://'+process.env.HOST+':'+process.env.DB_PORT
+            uri  : process.env.DB_URI
         },
         trello : {
             token : process.env.TRELLO_TOKEN,
